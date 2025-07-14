@@ -26,7 +26,7 @@ leaf:
           uplink_switch_interfaces: [ Ethernet3, Ethernet3 ]
     - group: RACK2
       filter:
-        tags: [ "App" ]
+        tags: [ "App", "Web" ]
       nodes:
         - name: s1-leaf3
           id: 3

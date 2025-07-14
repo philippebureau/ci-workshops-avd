@@ -249,11 +249,19 @@ vlan internal order ascending range 1006 1199
 
 | VLAN ID | Name | Trunk Groups |
 | ------- | ---- | ------------ |
+| 10 | Ten | - |
+| 20 | Twenty | - |
 | 4094 | MLAG | MLAG |
 
 ### VLANs Device Configuration
 
 ```eos
+!
+vlan 10
+   name Ten
+!
+vlan 20
+   name Twenty
 !
 vlan 4094
    name MLAG
@@ -271,8 +279,8 @@ vlan 4094
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | Channel-Group |
 | --------- | ----------- | ---- | ----- | ----------- | ----------- | ------------- |
 | Ethernet1 | MLAG_s1-leaf3_Ethernet1 | *trunk | *- | *- | *MLAG | 1 |
-| Ethernet2 | L2_s1-spine1_Ethernet5 | *trunk | *none | *- | *- | 2 |
-| Ethernet3 | L2_s1-spine2_Ethernet5 | *trunk | *none | *- | *- | 2 |
+| Ethernet2 | L2_s1-spine1_Ethernet5 | *trunk | *10,20 | *- | *- | 2 |
+| Ethernet3 | L2_s1-spine2_Ethernet5 | *trunk | *10,20 | *- | *- | 2 |
 | Ethernet6 | MLAG_s1-leaf3_Ethernet6 | *trunk | *- | *- | *MLAG | 1 |
 
 *Inherited from Port-Channel Interface
@@ -311,7 +319,7 @@ interface Ethernet6
 | Interface | Description | Mode | VLANs | Native VLAN | Trunk Group | LACP Fallback Timeout | LACP Fallback Mode | MLAG ID | EVPN ESI |
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
 | Port-Channel1 | MLAG_s1-leaf3_Port-Channel1 | trunk | - | - | MLAG | - | - | - | - |
-| Port-Channel2 | L2_SPINES_Port-Channel4 | trunk | none | - | - | - | - | 2 | - |
+| Port-Channel2 | L2_SPINES_Port-Channel4 | trunk | 10,20 | - | - | - | - | 2 | - |
 
 #### Port-Channel Interfaces Device Configuration
 
@@ -327,7 +335,7 @@ interface Port-Channel1
 interface Port-Channel2
    description L2_SPINES_Port-Channel4
    no shutdown
-   switchport trunk allowed vlan none
+   switchport trunk allowed vlan 10,20
    switchport mode trunk
    switchport
    mlag 2

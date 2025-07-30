@@ -3,7 +3,6 @@
 ## Table of Contents
 
 - [Management](#management)
-  - [Banner](#banner)
   - [Management Interfaces](#management-interfaces)
   - [DNS Domain](#dns-domain)
   - [NTP](#ntp)
@@ -14,7 +13,6 @@
   - [AAA Authorization](#aaa-authorization)
 - [Monitoring](#monitoring)
   - [TerminAttr Daemon](#terminattr-daemon)
-  - [Logging](#logging)
 - [MLAG](#mlag)
   - [MLAG Summary](#mlag-summary)
   - [MLAG Device Configuration](#mlag-device-configuration)
@@ -46,15 +44,6 @@
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
 
 ## Management
-
-### Banner
-
-#### MOTD Banner
-
-```text
-You shall not pass. Unless you are authorized. Then you shall pass.
-EOF
-```
 
 ### Management Interfaces
 
@@ -151,7 +140,6 @@ management api http-commands
 ```eos
 !
 username arista privilege 15 role network-admin secret sha512 <removed>
-username arista ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnB43mqZyoa9yn8qlkdbZylGcrsFGTz/kjkVTbaPwLod7Xyq+/tIoRpjuW1hxdPkA8unx46tns1KLPRMcrK57igHBy0ur1b7KyRd9TyXepmjgOfdlYNUK3rgAgQMr6wkuGZfkxfJv49zpbfW5oy3hpQmw36MgJCEFsq7cTHX2Slmz5Gnd/RdMk90NXTv6/IJfGYVxzoZvtA8RdPWDd0Oc7oglkh5Zyl+7zCOnKI3qcF4TLRjASwtH2gV9pKI7wRHkfzLoxUwIyAocFhpUlNyOBRmfuAzMri8NMM5G32ya99IC8oS8N9BKMgOPuOdXAhCBiQR1wi6SlYTLQcV+GBlFP arista@radio-canada-cbc-1-c7918b36-eos
 ```
 
 ### Enable Password
@@ -192,31 +180,6 @@ aaa authorization exec default local
 daemon TerminAttr
    exec /usr/bin/TerminAttr -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
    no shutdown
-```
-
-### Logging
-
-#### Logging Servers and Features Summary
-
-| Type | Level |
-| -----| ----- |
-
-| VRF | Source Interface |
-| --- | ---------------- |
-| default | Management0 |
-
-| VRF | Hosts | Ports | Protocol | SSL-profile |
-| --- | ----- | ----- | -------- | ----------- |
-| default | 10.200.0.108 | Default | UDP | - |
-| default | 10.200.1.108 | Default | UDP | - |
-
-#### Logging Servers and Features Device Configuration
-
-```eos
-!
-logging host 10.200.0.108
-logging host 10.200.1.108
-logging source-interface Management0
 ```
 
 ## MLAG
@@ -290,6 +253,7 @@ vlan internal order ascending range 1006 1199
 | ------- | ---- | ------------ |
 | 30 | Thirty | - |
 | 40 | Forty | - |
+| 45 | Forty-five | - |
 | 4093 | MLAG_L3 | MLAG |
 | 4094 | MLAG | MLAG |
 
@@ -302,6 +266,9 @@ vlan 30
 !
 vlan 40
    name Forty
+!
+vlan 45
+   name Forty-five
 !
 vlan 4093
    name MLAG_L3
@@ -466,6 +433,7 @@ interface Loopback0
 | --------- | ----------- | --- | ---- | -------- |
 | Vlan30 | Thirty | default | - | False |
 | Vlan40 | Forty | default | - | False |
+| Vlan45 | Forty-five | default | - | False |
 | Vlan4093 | MLAG_L3 | default | 1500 | False |
 | Vlan4094 | MLAG | default | 1500 | False |
 
@@ -475,6 +443,7 @@ interface Loopback0
 | --------- | --- | ---------- | ------------------ | ------------------------- | ------ | ------- |
 | Vlan30 |  default  |  10.30.30.3/24  |  -  |  10.30.30.1  |  -  |  -  |
 | Vlan40 |  default  |  10.40.40.3/24  |  -  |  10.40.40.1  |  -  |  -  |
+| Vlan45 |  default  |  10.45.45.3/24  |  -  |  10.45.45.1  |  -  |  -  |
 | Vlan4093 |  default  |  10.2.253.3/31  |  -  |  -  |  -  |  -  |
 | Vlan4094 |  default  |  10.2.253.1/31  |  -  |  -  |  -  |  -  |
 
@@ -493,6 +462,12 @@ interface Vlan40
    no shutdown
    ip address 10.40.40.3/24
    ip virtual-router address 10.40.40.1
+!
+interface Vlan45
+   description Forty-five
+   no shutdown
+   ip address 10.45.45.3/24
+   ip virtual-router address 10.45.45.1
 !
 interface Vlan4093
    description MLAG_L3

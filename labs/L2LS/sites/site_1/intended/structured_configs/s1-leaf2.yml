@@ -44,7 +44,7 @@ ethernet_interfaces:
   description: SERVER_s1-host1_eth2
   shutdown: false
   channel_group:
-    id: 99
+    id: 4
     mode: active
   peer: s1-host1
   peer_interface: eth2
@@ -58,9 +58,7 @@ local_users:
 - name: arista
   privilege: 15
   role: network-admin
-  sha512_password: $6$arista$zc2GOplvZ5Q5zLnbf2G9HT6WV/mwxIgI/AhGuyfw1lgk85x7iKifysCJceN8icGRgKLxMIzyNgqQhCTutIoFC/
-  ssh_key: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnB43mqZyoa9yn8qlkdbZylGcrsFGTz/kjkVTbaPwLod7Xyq+/tIoRpjuW1hxdPkA8unx46tns1KLPRMcrK57igHBy0ur1b7KyRd9TyXepmjgOfdlYNUK3rgAgQMr6wkuGZfkxfJv49zpbfW5oy3hpQmw36MgJCEFsq7cTHX2Slmz5Gnd/RdMk90NXTv6/IJfGYVxzoZvtA8RdPWDd0Oc7oglkh5Zyl+7zCOnKI3qcF4TLRjASwtH2gV9pKI7wRHkfzLoxUwIyAocFhpUlNyOBRmfuAzMri8NMM5G32ya99IC8oS8N9BKMgOPuOdXAhCBiQR1wi6SlYTLQcV+GBlFP
-    arista@radio-canada-cbc-1-c7918b36-eos
+  sha512_password: $6$arista$IK.Dd8DO58Odyz0E4GUgV2akTU1iAUDBzFQXr7ZC0f1zo3EP04slai8WcbMZTP0qQqoB00Zyuu4Wlhz31H.wf/
 management_api_http:
   enable_https: true
   enable_vrfs:
@@ -102,10 +100,10 @@ port_channel_interfaces:
     mode: trunk
     trunk:
       allowed_vlan: '10'
-- name: Port-Channel99
+- name: Port-Channel4
   description: SERVER_s1-host1
   shutdown: false
-  mlag: 99
+  mlag: 4
   spanning_tree_portfast: edge
   switchport:
     enabled: true

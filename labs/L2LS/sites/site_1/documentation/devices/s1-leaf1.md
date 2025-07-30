@@ -3,7 +3,6 @@
 ## Table of Contents
 
 - [Management](#management)
-  - [Banner](#banner)
   - [Management Interfaces](#management-interfaces)
   - [DNS Domain](#dns-domain)
   - [NTP](#ntp)
@@ -14,7 +13,6 @@
   - [AAA Authorization](#aaa-authorization)
 - [Monitoring](#monitoring)
   - [TerminAttr Daemon](#terminattr-daemon)
-  - [Logging](#logging)
 - [MLAG](#mlag)
   - [MLAG Summary](#mlag-summary)
   - [MLAG Device Configuration](#mlag-device-configuration)
@@ -43,15 +41,6 @@
   - [VRF Instances Device Configuration](#vrf-instances-device-configuration)
 
 ## Management
-
-### Banner
-
-#### MOTD Banner
-
-```text
-You shall not pass. Unless you are authorized. Then you shall pass.
-EOF
-```
 
 ### Management Interfaces
 
@@ -148,7 +137,6 @@ management api http-commands
 ```eos
 !
 username arista privilege 15 role network-admin secret sha512 <removed>
-username arista ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnB43mqZyoa9yn8qlkdbZylGcrsFGTz/kjkVTbaPwLod7Xyq+/tIoRpjuW1hxdPkA8unx46tns1KLPRMcrK57igHBy0ur1b7KyRd9TyXepmjgOfdlYNUK3rgAgQMr6wkuGZfkxfJv49zpbfW5oy3hpQmw36MgJCEFsq7cTHX2Slmz5Gnd/RdMk90NXTv6/IJfGYVxzoZvtA8RdPWDd0Oc7oglkh5Zyl+7zCOnKI3qcF4TLRjASwtH2gV9pKI7wRHkfzLoxUwIyAocFhpUlNyOBRmfuAzMri8NMM5G32ya99IC8oS8N9BKMgOPuOdXAhCBiQR1wi6SlYTLQcV+GBlFP arista@radio-canada-cbc-1-c7918b36-eos
 ```
 
 ### Enable Password
@@ -189,31 +177,6 @@ aaa authorization exec default local
 daemon TerminAttr
    exec /usr/bin/TerminAttr -cvaddr=192.168.0.5:9910 -cvauth=token,/tmp/token -smashexcludes=ale,flexCounter,hardware,kni,pulse,strata -ingestexclude=/Sysdb/cell/1/agent,/Sysdb/cell/2/agent -taillogs
    no shutdown
-```
-
-### Logging
-
-#### Logging Servers and Features Summary
-
-| Type | Level |
-| -----| ----- |
-
-| VRF | Source Interface |
-| --- | ---------------- |
-| default | Management0 |
-
-| VRF | Hosts | Ports | Protocol | SSL-profile |
-| --- | ----- | ----- | -------- | ----------- |
-| default | 10.200.0.108 | Default | UDP | - |
-| default | 10.200.1.108 | Default | UDP | - |
-
-#### Logging Servers and Features Device Configuration
-
-```eos
-!
-logging host 10.200.0.108
-logging host 10.200.1.108
-logging source-interface Management0
 ```
 
 ## MLAG
@@ -313,7 +276,7 @@ vlan 4094
 | Ethernet1 | MLAG_s1-leaf2_Ethernet1 | *trunk | *- | *- | *MLAG | 1 |
 | Ethernet2 | L2_s1-spine1_Ethernet2 | *trunk | *10 | *- | *- | 2 |
 | Ethernet3 | L2_s1-spine2_Ethernet2 | *trunk | *10 | *- | *- | 2 |
-| Ethernet4 | SERVER_s1-host1_eth1 | *access | *10 | *- | *- | 99 |
+| Ethernet4 | SERVER_s1-host1_eth1 | *access | *10 | *- | *- | 4 |
 | Ethernet6 | MLAG_s1-leaf2_Ethernet6 | *trunk | *- | *- | *MLAG | 1 |
 
 *Inherited from Port-Channel Interface
@@ -340,7 +303,7 @@ interface Ethernet3
 interface Ethernet4
    description SERVER_s1-host1_eth1
    no shutdown
-   channel-group 99 mode active
+   channel-group 4 mode active
 !
 interface Ethernet6
    description MLAG_s1-leaf2_Ethernet6
@@ -358,7 +321,7 @@ interface Ethernet6
 | --------- | ----------- | ---- | ----- | ----------- | ------------| --------------------- | ------------------ | ------- | -------- |
 | Port-Channel1 | MLAG_s1-leaf2_Port-Channel1 | trunk | - | - | MLAG | - | - | - | - |
 | Port-Channel2 | L2_SPINES_Port-Channel2 | trunk | 10 | - | - | - | - | 2 | - |
-| Port-Channel99 | SERVER_s1-host1 | access | 10 | - | - | - | - | 99 | - |
+| Port-Channel4 | SERVER_s1-host1 | access | 10 | - | - | - | - | 4 | - |
 
 #### Port-Channel Interfaces Device Configuration
 
@@ -379,13 +342,13 @@ interface Port-Channel2
    switchport
    mlag 2
 !
-interface Port-Channel99
+interface Port-Channel4
    description SERVER_s1-host1
    no shutdown
    switchport access vlan 10
    switchport mode access
    switchport
-   mlag 99
+   mlag 4
    spanning-tree portfast
 ```
 

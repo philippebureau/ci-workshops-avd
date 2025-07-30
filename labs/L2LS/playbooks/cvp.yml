@@ -8,3 +8,5 @@
     - name: Deploy to Static Configuration Studio
       ansible.builtin.import_role:
         name: arista.avd.cv_deploy
+      vars:
+        cv_inventory_hostname: cv_server
